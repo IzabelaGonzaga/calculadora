@@ -1,24 +1,35 @@
-import React from 'react';
-import logo from './logo.svg';
+import { useState } from 'react';
 import './App.css';
+import Display from './components/Display'
+import Pad from './components/Pad'
 
 function App() {
+  const [displayValue, setDisplayValue] = useState('0');
+
+  const handleNumberClick = (number: number) => {
+    setDisplayValue(displayValue === '0'? number.toString() : displayValue.concat(number.toString()));
+  } 
+
+  const handleDelClick = () => {
+    const valor = displayValue.slice(0,-1);
+    setDisplayValue(valor.length ? valor : '0');
+  }
+
+  const handleResetClick = () => {
+    setDisplayValue('0');
+  }
+
+  const handleResultClick = () => {
+    const result = eval(displayValue);  //eval pega a expressão e faz a operação descrita (usar com cautela em operações de deletar)
+    setDisplayValue(result.toString());
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div className='calculator'>
+        <Display value={displayValue} />
+        <Pad handleNumberClick={handleNumberClick} handleDelClick={handleDelClick} handleResetClick={handleResetClick} handleResultClick={handleResultClick} />
+      </div>
     </div>
   );
 }
